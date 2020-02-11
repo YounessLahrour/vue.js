@@ -8,6 +8,7 @@
 </head>
 <body>
     <div id="app">
+        <button v-on:click="changeVisibility">Mostrar/Ocultar</button>
         <ul v-if="mostrar">
             <li v-for="(show, index) in tvshows" v-bind:key="index">
                 <strong>{{show.name}}:</strong>({{show.season}} Temporadas) 
@@ -22,13 +23,18 @@
     const app = new Vue({
         el:'#app',
         data: {
-            mostrar: true,
+            mostrar: false,
             tvshows: [
                 {name: 'Game o Thrones', season: 7},
                 {name: 'Breaking BAd', season: 5},
                 {name:'LOST', season: 6},
                 {name: 'Battlestar Galactic', season:4}
             ]
+        },
+        methods: {
+            changeVisibility: function(){
+                this.mostrar = !this.mostrar
+            }
         }
     })
     </script>
