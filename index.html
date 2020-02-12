@@ -9,23 +9,38 @@
 <body>
     <div id="app">
         <button v-on:click="changeVisibility">Mostrar/Ocultar</button>
-        <ul v-if="mostrar">
-            <tv-show
-            v-for="(show, index) in tvshows"
-            :key="index"
-            :name="show.name"
-            :seasons="show.season"
-            >
-                
-            </tv-show>
-            
-        </ul>
+        <tv-show-list v-if="mostrar"></tv-show-list>
         <div v-else>
             No hay datos
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.js"></script>
     <script>
+        Vue.component('tv-show-list',{
+            data: function (){
+                return{
+                    tvshows: [
+                        {name: 'Game o Thrones', season: 7},
+                        {name: 'Breaking BAd', season: 5},
+                        {name:'LOST', season: 6},
+                        {name: 'Battlestar Galactic', season:4}
+                     ]
+                }
+            },
+            template: `
+            <ul >
+            <tv-show
+            v-for="(show, index) in tvshows"
+            :key="index"
+            :name="show.name"
+            :seasons="show.season"
+            >  
+            </tv-show>
+            
+             </ul>
+            `
+        })
+
         Vue.component('tv-show',{
             props:{
                 name: String,
@@ -42,12 +57,7 @@
         el:'#app',
         data: {
             mostrar: false,
-            tvshows: [
-                {name: 'Game o Thrones', season: 7},
-                {name: 'Breaking BAd', season: 5},
-                {name:'LOST', season: 6},
-                {name: 'Battlestar Galactic', season:4}
-            ]
+           
         },
         methods: {
             changeVisibility: function(){
