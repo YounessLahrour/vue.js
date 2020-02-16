@@ -8,60 +8,65 @@
 </head>
 <body>
     <div id="app">
-        <button v-on:click="changeVisibility">Mostrar/Ocultar</button>
-        <tv-show-list v-if="mostrar"></tv-show-list>
-        <div v-else>
-            No hay datos
+        
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.js"></script>
     <script>
-        Vue.component('tv-show-list',{
-            data: function (){
-                return{
-                    tvshows: [
-                        {name: 'Game o Thrones', season: 7},
-                        {name: 'Breaking BAd', season: 5},
-                        {name:'LOST', season: 6},
-                        {name: 'Battlestar Galactic', season:4}
-                     ]
+        Vue.component('todo-add', {
+            template:`
+            <div>
+                <input type="text" v-model="title"/>
+                <button @click="onClick">Añadir</button>
+            </div>
+            `,
+            data: function(){
+                return {
+                    title:null
                 }
             },
-            template: `
-            <ul >
-            <tv-show
-            v-for="(show, index) in tvshows"
+            methods: {
+                onClick: function(){
+                    this.$emit('new',{title: this.title})
+                }
+            }
+        })
+
+    Vue.component('todo-item',{
+        props: ['todos'],
+        template: `<li>{{todos.title}}</li>`
+    })    
+    
+    Vue.component('todo-list', {
+        props: ['todos'],
+        template: `
+        <ul>
+            <todo-item
+            v-for="(todo, index) in todos"
             :key="index"
-            :name="show.name"
-            :seasons="show.season"
-            >  
-            </tv-show>
-            
-             </ul>
-            `
-        })
-
-        Vue.component('tv-show',{
-            props:{
-                name: String,
-                seasons: Number
-            },
-            template: `
-            <li>
-                <strong>{{name}}</strong>({{seasons}} Temporadas)
-            </li>
-            `
-        })
-
+            :todos="todo">
+            </todo-item>
+        </ul>
+        `
+    })
     const app = new Vue({
         el:'#app',
         data: {
-            mostrar: false,
-           
+            todos: [
+                {title: 'tarea 1', completed: false},
+                {title: 'tarea 2', completed: false},
+                {title: 'tarea 3', completed: false},
+            ]          
         },
-        methods: {
-            changeVisibility: function(){
-                this.mostrar = !this.mostrar
+        template: `
+        <div>
+            <todo-list :todos="todos"> </todo-list>
+            <todo-add @new="addNewTodo"></todo-add>
+        </div>
+        `,
+        methods:{
+            addNewTodo: function (todo){
+                this.todos.push(todo)
             }
         }
     })
